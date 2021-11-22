@@ -26,3 +26,11 @@ class ProductPage(BasePage):
     def should_be_the_price_in_cart(self, product_cost):
         alert_text = self.browser.find_element(*ProductPageLocators.PRODUCT_COST_ALERT).text
         assert product_cost == alert_text, "Product cost should be present in the alert"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+        "Success message is presented, but should not be"
+
+    def should_disappear_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+        "Success message should dissapear, but it still exists"
