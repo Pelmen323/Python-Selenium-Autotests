@@ -25,6 +25,9 @@ class BasePage:
     def open(self):
         self.browser.get(self.url)
 
+    def go_to_basket_page(self):
+        self.browser.find_element(*BasePageLocators.BASKET_LINK).click()
+
     def is_element_present(self, locator_type, locator):
         try:
             self.browser.find_element(locator_type, locator)
