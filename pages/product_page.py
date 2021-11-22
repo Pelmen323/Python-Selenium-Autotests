@@ -21,8 +21,8 @@ class ProductPage(BasePage):
 
     def should_be_the_same_product_in_alert(self, product_name):
         alert_text = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME_ALERT).text
-        assert product_name in alert_text, "Product name should be present in the alert"
+        assert product_name == alert_text, "Product name should be present in the alert"
 
     def should_be_the_price_in_cart(self, product_cost):
         alert_text = self.browser.find_element(*ProductPageLocators.PRODUCT_COST_ALERT).text
-        assert product_cost in alert_text, "Product cost should be present in the alert"
+        assert product_cost == alert_text, "Product cost should be present in the alert"
