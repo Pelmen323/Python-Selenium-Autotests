@@ -6,4 +6,3 @@ def test_verify_login_page_is_valid(browser):
     page = LoginPage(browser=browser, url=link)
     page.open()
     page.should_be_login_page()
-
