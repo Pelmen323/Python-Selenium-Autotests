@@ -6,6 +6,7 @@ class BasketPage(BasePage):
     '''
     Class for the basket page
     '''
+
     def empty_basket_message_should_include_text(self):
         '''- Verifies the empty basket message contains the text depending on the current locale'''
         page_text = self.browser.find_element(*BasketPageLocators.EMPTY_CART_MESSAGE).text
@@ -36,10 +37,12 @@ class BasketPage(BasePage):
         message_text = languages[current_locale]
         assert message_text in page_text, f"The message about empty cart should contain valid text {message_text}, actual - {page_text}"
 
+
     def should_be_empty_basket(self):
         '''- Verifies the basket has no items in it'''
         assert self.is_not_element_present(*BasketPageLocators.BASKET_ITEM), \
             f"The shopping cart should be empty, but there are items in the page with locator {BasketPageLocators.BASKET_ITEM}"
+
 
     def should_be_message_about_empty_basket(self):
         '''- Verifies the empty basket page has the message about it'''

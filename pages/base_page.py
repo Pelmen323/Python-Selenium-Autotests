@@ -9,18 +9,22 @@ class BasePage:
     '''
     Initial class that is inherited by all other Page classes
     '''
+
     def __init__(self, browser: object, url: str, timeout: int = 3) -> object:
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
 
+
     def go_to_login_page(self):
         '''- Navigates to a login page by clicking a link in the header'''
         self.browser.find_element(*BasePageLocators.LOGIN_LINK).click()
 
+
     def go_to_basket_page(self):
         '''- Navigates to a basket page by clicking a link in the header'''
         self.browser.find_element(*BasePageLocators.BASKET_LINK).click()
+
 
     def is_element_present(self, locator_type, locator: str) -> bool:
         '''Verifies if element is present on the page\n
@@ -34,6 +38,7 @@ class BasePage:
             return False
         return True
 
+
     def is_not_element_present(self, locator_type, locator: str, timeout: int = 4) -> bool:
         '''Verifies if element is NOT present on the page during timeout period\n
         Example:
@@ -45,6 +50,7 @@ class BasePage:
         except TimeoutException:
             return True
         return False
+
 
     def is_disappeared(self, locator_type, locator: str, timeout: int = 4) -> bool:
         '''Verifies if element DISAPPEARED during timeout period\n
@@ -59,17 +65,21 @@ class BasePage:
             return False
         return True
 
+
     def open(self):
         '''- Opens the URL of the page object'''
         self.browser.get(self.url)
+
 
     def should_be_authorized_user(self):
         '''- Verifies if the current user is authorized based on user icon'''
         assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented, probably unauthorized user"
 
+
     def should_be_login_link(self):
         '''- Verifies the login link is present on the page'''
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not found"
+
 
     def solve_quiz_and_get_code(self):
         '''- Solves the popup quiz and inputs the code on the second alert'''
