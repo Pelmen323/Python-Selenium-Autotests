@@ -4,13 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flake8 = "*"
-selenium = "*"
-webdriver-manager = "*"
-pytest = "*"
+pytest = "==6.2.5"
+selenium = "==4.0.0"
 allure-pytest = "*"
+webdriver-manager = "*"
+flake8 = "*"
+auto-py-to-exe = "*"
+faker = "*"
 
 [dev-packages]
+autopep8 = "*"
 
 [requires]
 python_version = "3.10"
