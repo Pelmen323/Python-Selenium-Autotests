@@ -6,6 +6,7 @@ class BasePageLocators:
     LOGIN_LINK = (By.CSS_SELECTOR, ".user-nav a[href='/login']")
     RETURN_TO_MAIN_PAGE_LINK = (By.XPATH, "(//a[normalize-space()='HUMAN BENCHMARK'])[2]")
     DASHBOARD_ACTIVE_LINK = (By.CSS_SELECTOR, "a[class='current'][href='/dashboard']")
+    SAVE_RESULTS_BUTTON = (By.XPATH, '//button[text()="Save score"]')
 
 
 class LoginPageLocators:
@@ -21,3 +22,16 @@ class NumMemoryPageLocators:
     TEXT_NUM_TO_SAVE = (By.CSS_SELECTOR, 'div[class*="big-number"]')
     SUBMIT_BUTTON = (By.XPATH, '//button[text()="Submit"]')
     NEXT_BUTTON = (By.XPATH, '//button[text()="NEXT"]')
+
+
+class ReactTimePageLocators:
+    '''- Includes locators of minigames pages'''
+    START_BUTTON = (By.XPATH, '//h1[text()="Reaction Time Test"]')
+    TEXT_TO_CLICK = (By.XPATH, '//div[text()="Click!"]')
+    NEXT_BUTTON = (By.XPATH, '//h2[text()="Click to keep going"]')
+
+
+class TypingPageLocators:
+    '''- Includes locators of minigames pages'''
+    TEXT_SYMBOLS = (By.CSS_SELECTOR, 'span.incomplete')
+    TEXT_FIELD = (By.CSS_SELECTOR, 'div.letters.notranslate')

@@ -1,7 +1,7 @@
 from pages.hb_main_page import HbMainPage
 from pages.hb_login_page import HbLoginPage
 from pages.hb_minigames_page import HbMinigamesPage
-from pages.locators import NumMemoryPageLocators
+from pages.locators import NumMemoryPageLocators, ReactTimePageLocators, BasePageLocators
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import time
@@ -40,11 +40,11 @@ class TestHumanBenchmark:
                 ac = ActionChains(browser)
                 ac.move_to_element(element).click().perform()
 
-            # Save results
-            page.browser.find_element(By.XPATH, '//button[text()="Save score"]').click()
+            page.save_minigame_results()
 
             time.sleep(5)
 
+    @pytest.mark.skip()
     def test_number_memory(self, browser):
         page = HbMinigamesPage(browser=browser, timeout=5)
         page.open()
@@ -68,9 +68,56 @@ class TestHumanBenchmark:
                 page.fill_number_memory_number(number_to_insert=number_to_store)
                 page.browser.find_element(*NumMemoryPageLocators.NEXT_BUTTON).click()
 
+            # Intentional fail to finish the game
             page.fill_number_memory_number(number_to_insert="123")
-            time.sleep(30)
-            # Save results
-            page.browser.find_element(By.XPATH, '//button[text()="Save score"]').click()
+            page.save_minigame_results()
+
+            time.sleep(5)
+
+    @pytest.mark.skip()
+    def test_rection_time(self, browser):
+        page = HbMinigamesPage(browser=browser, timeout=5)
+        page.open()
+        # Login
+        page.go_to_login_page()
+        login_page = HbLoginPage(browser=browser, timeout=5)
+        login_page.login(login=TestHumanBenchmark.login, password=TestHumanBenchmark.password)
+        page.verify_is_on_dashboard_page()
+        for i in range(1):
+            login_page.go_to_main_page()
+            # Navigate to minigame
+            page.go_to_minigame(minigame_name="Reaction Time")
+
+            # Start the minigame
+            element = page.browser.find_element(*ReactTimePageLocators.START_BUTTON)
+            ac = ActionChains(browser)
+            ac.move_to_element(element).click().perform()
+            # Complete the minigame for some time
+            for i in range(4):
+                page.perform_reaction_time_action()
+                page.browser.find_element(*ReactTimePageLocators.NEXT_BUTTON).click()
+
+            # Final click - moved here to not click on next button
+            page.perform_reaction_time_action()
+            page.save_minigame_results()
+
+            time.sleep(5)
+
+    def test_typing_time(self, browser):
+        page = HbMinigamesPage(browser=browser, timeout=5)
+        page.open()
+        # Login
+        page.go_to_login_page()
+        login_page = HbLoginPage(browser=browser, timeout=5)
+        login_page.login(login=TestHumanBenchmark.login, password=TestHumanBenchmark.password)
+        page.verify_is_on_dashboard_page()
+        for i in range(1):
+            login_page.go_to_main_page()
+            # Navigate to minigame
+            page.go_to_minigame(minigame_name="Typing")
+
+            # Start the minigame
+            page.perform_typing_time_test()
+            page.save_minigame_results()
 
             time.sleep(5)
