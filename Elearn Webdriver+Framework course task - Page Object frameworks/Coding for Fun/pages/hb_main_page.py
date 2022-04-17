@@ -2,6 +2,7 @@ from .generic_page import GenericPage
 from .locators import BasePageLocators
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 
 
 class HbMainPage(GenericPage):
@@ -19,9 +20,8 @@ class HbMainPage(GenericPage):
         ac.move_to_element(element).click().perform()
 
     def go_to_minigame(self, minigame_name: str):
-        if "Aim" in minigame_name:
-            self.browser.find_element(*BasePageLocators.TILE_AIM_MINIGAME).click()
+        self.browser.find_element(By.XPATH, f"//h3[normalize-space()='{minigame_name}']").click()
 
     def verify_is_on_dashboard_page(self):
         '''- Verifies the page has dashboard link active'''
-        assert self.is_element_present(*BasePageLocators.DASHBOARD_ACTIVE_LINK), "Dashboard link is active"      
+        assert self.is_element_present(*BasePageLocators.DASHBOARD_ACTIVE_LINK), "Dashboard link is active"
