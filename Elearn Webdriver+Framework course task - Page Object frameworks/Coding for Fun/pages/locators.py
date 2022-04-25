@@ -35,3 +35,12 @@ class TypingPageLocators:
     '''- Includes locators of minigames pages'''
     TEXT_SYMBOLS = (By.CSS_SELECTOR, 'span.incomplete')
     TEXT_FIELD = (By.CSS_SELECTOR, 'div.letters.notranslate')
+
+
+class MemorySequencePageLocators:
+    '''- Includes locators of minigames pages'''
+    START_BUTTON = (By.XPATH, '//button[text()="Start"]')
+    SQUARE_BUTTON = (By.CSS_SELECTOR, '.square')
+    ACTIVE_BUTTON = (By.CSS_SELECTOR, 'div[class="square active"]')
+    SUBMIT_BUTTON = (By.XPATH, '//button[text()="Submit"]')
+    NEXT_BUTTON = (By.XPATH, '//button[text()="NEXT"]')

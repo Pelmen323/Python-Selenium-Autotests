@@ -1,7 +1,7 @@
 from pages.hb_main_page import HbMainPage
 from pages.hb_login_page import HbLoginPage
 from pages.hb_minigames_page import HbMinigamesPage
-from pages.locators import NumMemoryPageLocators, ReactTimePageLocators, BasePageLocators
+from pages.locators import NumMemoryPageLocators, ReactTimePageLocators, BasePageLocators, MemorySequencePageLocators
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import time
@@ -75,7 +75,7 @@ class TestHumanBenchmark:
             time.sleep(5)
 
     @pytest.mark.skip()
-    def test_rection_time(self, browser):
+    def test_reaction_time(self, browser):
         page = HbMinigamesPage(browser=browser, timeout=5)
         page.open()
         # Login
@@ -103,6 +103,7 @@ class TestHumanBenchmark:
 
             time.sleep(5)
 
+    @pytest.mark.skip()
     def test_typing_time(self, browser):
         page = HbMinigamesPage(browser=browser, timeout=5)
         page.open()
@@ -121,3 +122,47 @@ class TestHumanBenchmark:
             page.save_minigame_results()
 
             time.sleep(5)
+
+    def test_sequence_memory(self, browser):
+        rounds_to_play = 30
+        page = HbMinigamesPage(browser=browser, timeout=5)
+        page.open()
+        # Login
+        page.go_to_login_page()
+        login_page = HbLoginPage(browser=browser, timeout=5)
+        login_page.login(login=TestHumanBenchmark.login, password=TestHumanBenchmark.password)
+        page.verify_is_on_dashboard_page()
+        for i in range(1):
+            login_page.go_to_main_page()
+            # Navigate to minigame
+            page.go_to_minigame(minigame_name="Sequence Memory")
+
+            # Start the minigame
+            element = page.browser.find_element(*MemorySequencePageLocators.START_BUTTON)
+            ac = ActionChains(browser)
+            ac.move_to_element(element).click().perform()
+            # Complete the minigame for some time
+            num_of_elements_to_save = 1
+            for level in range(rounds_to_play):
+                active_buttons_list = []
+                for i in range(num_of_elements_to_save):
+                    active_element = WebDriverWait(page.browser, 10).until(EC.visibility_of_element_located(MemorySequencePageLocators.ACTIVE_BUTTON))
+                    active_buttons_list.append(active_element)
+                    while "active" in active_element.get_attribute("class"):
+                        time.sleep(0.2)
+
+                if num_of_elements_to_save < rounds_to_play:
+                    for item in active_buttons_list:
+                        item.click()
+
+                else:
+                    active_buttons_list[1].click()
+                    break
+
+                num_of_elements_to_save += 1
+
+            # Final click - moved here to not click on next button
+            page.save_minigame_results()
+
+            time.sleep(5)
+            
