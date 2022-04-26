@@ -1,13 +1,14 @@
 from pages.hb_main_page import HbMainPage
 from pages.hb_login_page import HbLoginPage
 from pages.hb_minigames_page import HbMinigamesPage
-from pages.locators import NumMemoryPageLocators, ReactTimePageLocators, BasePageLocators, MemorySequencePageLocators
+from pages.locators import NumMemoryPageLocators, ReactTimePageLocators, MemorySequencePageLocators, VisualMemoryPageLocators, BasePageLocators
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pytest
+from selenium.common.exceptions import TimeoutException
 
 
 class TestHumanBenchmark:
@@ -17,7 +18,7 @@ class TestHumanBenchmark:
     @pytest.mark.skip()
     def test_human_aim(self, browser):
         locator_target = 'div[data-aim-target=true] div[class="css-z6vxiy e6yfngs3"]'
-
+        rounds_to_play = 30
         page = HbMainPage(browser=browser, timeout=5)
         page.open()
         # Login
@@ -35,7 +36,7 @@ class TestHumanBenchmark:
             ac = ActionChains(browser)
             ac.move_to_element(element).click().perform()
             # Perform clicks for each of 30 targets
-            for i in range(30):
+            for i in range(rounds_to_play):
                 element = page.browser.find_element(By.CSS_SELECTOR, locator_target)
                 ac = ActionChains(browser)
                 ac.move_to_element(element).click().perform()
@@ -46,6 +47,7 @@ class TestHumanBenchmark:
 
     @pytest.mark.skip()
     def test_number_memory(self, browser):
+        rounds_to_play = 30
         page = HbMinigamesPage(browser=browser, timeout=5)
         page.open()
         # Login
@@ -63,7 +65,7 @@ class TestHumanBenchmark:
             ac = ActionChains(browser)
             ac.move_to_element(element).click().perform()
             # Complete the minigame for some time
-            for i in range(30):
+            for i in range(rounds_to_play):
                 number_to_store = page.browser.find_element(*NumMemoryPageLocators.TEXT_NUM_TO_SAVE).text
                 page.fill_number_memory_number(number_to_insert=number_to_store)
                 page.browser.find_element(*NumMemoryPageLocators.NEXT_BUTTON).click()
@@ -123,6 +125,7 @@ class TestHumanBenchmark:
 
             time.sleep(5)
 
+    @pytest.mark.skip()
     def test_sequence_memory(self, browser):
         rounds_to_play = 30
         page = HbMinigamesPage(browser=browser, timeout=5)
@@ -155,14 +158,51 @@ class TestHumanBenchmark:
                     for item in active_buttons_list:
                         item.click()
 
+                # Fail final round to save results
                 else:
                     active_buttons_list[1].click()
                     break
 
                 num_of_elements_to_save += 1
 
-            # Final click - moved here to not click on next button
             page.save_minigame_results()
 
             time.sleep(5)
-            
+
+    def test_visual_memory(self, browser):
+        rounds_to_play = 100
+        page = HbMinigamesPage(browser=browser, timeout=5)
+        page.open()
+        # Login
+        page.go_to_login_page()
+        login_page = HbLoginPage(browser=browser, timeout=5)
+        login_page.login(login=TestHumanBenchmark.login, password=TestHumanBenchmark.password)
+        page.verify_is_on_dashboard_page()
+        for i in range(1):
+            login_page.go_to_main_page()
+            # Navigate to minigame
+            page.go_to_minigame(minigame_name="Visual Memory")
+
+            # Start the minigame
+            element = page.browser.find_element(*VisualMemoryPageLocators.START_BUTTON)
+            ac = ActionChains(browser)
+            ac.move_to_element(element).click().perform()
+            # Complete the minigame for some time
+            for level in range(rounds_to_play):
+                page = HbMinigamesPage(browser=browser, timeout=5)
+                WebDriverWait(page.browser, 10).until(EC.presence_of_element_located((By.XPATH, f"//span[@class = 'css-dd6wi1']/span[text()='{level+1}']")))
+                active_buttons_list = page.browser.find_elements(*VisualMemoryPageLocators.ACTIVE_BUTTON)
+                time.sleep(2)
+                # WebDriverWait(page.browser, 10).until_not(EC.presence_of_element_located(VisualMemoryPageLocators.ACTIVE_BUTTON))
+
+                for i in active_buttons_list:
+                    i.click()
+
+                try:
+                    quick_page = HbMinigamesPage(browser=browser)
+                    if WebDriverWait(quick_page.browser, 0.1).until(EC.visibility_of_element_located(BasePageLocators.SAVE_RESULTS_BUTTON)) is not False:
+                        page.save_minigame_results()
+                except TimeoutException:
+                    continue
+
+            time.sleep(5)
