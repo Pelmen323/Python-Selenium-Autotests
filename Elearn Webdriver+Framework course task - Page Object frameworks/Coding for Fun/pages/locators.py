@@ -12,6 +12,7 @@ class BasePageLocators:
     START_BUTTON = (By.XPATH, '//button[text()="Start"]')
     SUBMIT_BUTTON = (By.XPATH, '//button[text()="Submit"]')
     NEXT_BUTTON = (By.XPATH, '//button[text()="NEXT"]')
+    CONTINUE_BUTTON = (By.XPATH, '//button[text()="Continue"]')
 
 
 class LoginPageLocators(BasePageLocators):
@@ -24,6 +25,7 @@ class LoginPageLocators(BasePageLocators):
 class NumMemoryPageLocators(BasePageLocators):
     '''- Includes locators of minigames pages'''
     TEXT_NUM_TO_SAVE = (By.CSS_SELECTOR, 'div[class*="big-number"]')
+
 
 class ReactTimePageLocators(BasePageLocators):
     '''- Includes locators of minigames pages'''
@@ -47,3 +49,15 @@ class MemorySequencePageLocators(BasePageLocators):
 class VisualMemoryPageLocators(BasePageLocators):
     '''- Includes locators of minigames pages'''
     ACTIVE_BUTTON = (By.CSS_SELECTOR, '.memory-test .active')
+    CONTINUE_BUTTON = (By.XPATH, '//button[text()="Continue"]')
+
+class ChimpTestPageLocators(BasePageLocators):
+    '''- Includes locators of minigames pages'''
+    START_BUTTON = (By.XPATH, '//button[text()="Start Test"]')
+    ACTIVE_BUTTON = (By.CSS_SELECTOR, 'div[data-cellnumber]')
+
+class VerbalMemoryPageLocators(BasePageLocators):
+    '''- Includes locators of minigames pages'''
+    WORD_LOCATOR = (By.CSS_SELECTOR, 'div.word')
+    SEEN_BUTTON = (By.XPATH, '//button[text()="SEEN"]')
+    NEW_BUTTON = (By.XPATH, '//button[text()="NEW"]')
