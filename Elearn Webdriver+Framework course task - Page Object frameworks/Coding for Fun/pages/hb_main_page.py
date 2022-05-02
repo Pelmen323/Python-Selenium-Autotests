@@ -26,5 +26,11 @@ class HbMainPage(GenericPage):
         '''- Verifies the page has dashboard link active'''
         assert self.is_element_present(*BasePageLocators.DASHBOARD_ACTIVE_LINK), "Dashboard link is active"
 
+    def start_minigame(self, start_button_locator: tuple):
+        '''- Starts the minigame by clicking on start button via ActionChains'''
+        element = self.browser.find_element(*start_button_locator)
+        ac = ActionChains(self.browser)
+        ac.move_to_element(element).click().perform()
+
     def save_minigame_results(self):
         self.browser.find_element(*BasePageLocators.SAVE_RESULTS_BUTTON).click()

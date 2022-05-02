@@ -22,6 +22,10 @@ class LoginPageLocators(BasePageLocators):
     BUTTON_SUBMIT = (By.CSS_SELECTOR, "input[type='submit']")
 
 
+class HumanAimPageLocators(BasePageLocators):
+    '''- Includes locators of minigames pages'''
+    TARGET_TO_CLICK = (By.CSS_SELECTOR, 'div[data-aim-target=true] div[class="css-z6vxiy e6yfngs3"]')
+
 class NumMemoryPageLocators(BasePageLocators):
     '''- Includes locators of minigames pages'''
     TEXT_NUM_TO_SAVE = (By.CSS_SELECTOR, 'div[class*="big-number"]')
@@ -51,10 +55,12 @@ class VisualMemoryPageLocators(BasePageLocators):
     ACTIVE_BUTTON = (By.CSS_SELECTOR, '.memory-test .active')
     CONTINUE_BUTTON = (By.XPATH, '//button[text()="Continue"]')
 
+
 class ChimpTestPageLocators(BasePageLocators):
     '''- Includes locators of minigames pages'''
     START_BUTTON = (By.XPATH, '//button[text()="Start Test"]')
     ACTIVE_BUTTON = (By.CSS_SELECTOR, 'div[data-cellnumber]')
+
 
 class VerbalMemoryPageLocators(BasePageLocators):
     '''- Includes locators of minigames pages'''
